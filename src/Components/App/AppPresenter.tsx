@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import styled from "../../typed-components";
 
 interface IProps {
   isLoggedIn: boolean;
