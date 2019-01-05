@@ -10,3 +10,22 @@ Apollo: Frontend(like redux)
 2.3 set default client state - Apollo boost 세팅끝!!!
 
 2.6 yarn add prop-types
+
+## Screens:
+
+### Logged Out:
+
+- [ ] Home
+- [ ] Phone Login
+- [ ] Verify Phone Number
+- [ ] Social Login
+
+### Logged In:
+
+- [ ] Home
+- [ ] Ride
+- [ ] Edit Account
+- [ ] Settings
+- [ ] Saved Places
+- [ ] Add Place
+- [ ] Challenge: Ride History
