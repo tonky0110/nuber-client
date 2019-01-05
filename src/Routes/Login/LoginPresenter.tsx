@@ -1,5 +1,6 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Link, RouteComponentProps } from "react-router-dom";
 import bgImage from "../../images/bg.png";
 import styled from "../../typed-components";
 
@@ -23,7 +24,7 @@ const Logo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0, -14px 28px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 -14px 28px rgba(0, 0, 0, 0.22);
   text-transform: uppercase;
   font-weight: 500;
   font-size: 25px;
@@ -45,11 +46,12 @@ const FakeInput = styled.div`
 
 const PhoneLogin = styled.div`
   padding: 20px;
+  cursor: pointer;
 `;
 
 const Grey = styled.span`
-  border-top: 1px solid ${props => props.theme.greyColor};
-  padding: 30px 20px;
+  color: ${props => props.theme.greyColor};
+  margin-left: 10px;
 `;
 
 const SocialLogin = styled.div`
@@ -60,27 +62,35 @@ const SocialLogin = styled.div`
 const SocialLink = styled.span`
   color: ${props => props.theme.blueColor};
   font-size: 20px;
+  cursor: pointer;
 `;
 
 interface IProps extends RouteComponentProps<any> {}
 
 const LoginPresenter: React.SFC<IProps> = () => (
   <Container>
+    <Helmet>
+      <title>Login | Nuber</title>
+    </Helmet>
     <Header>
       <Logo>
         <Title>Nuber</Title>
       </Logo>
     </Header>
     <Footer>
-      <Subtitle>Get moving with Nuber</Subtitle>
-      <PhoneLogin>
-        <FakeInput>
-          KR +82 <Grey>Enter your mobile number</Grey>
-        </FakeInput>
-      </PhoneLogin>
-      <SocialLogin>
-        <SocialLink>Or connect with social</SocialLink>
-      </SocialLogin>
+      <Link to={"/phone-login"}>
+        <PhoneLogin>
+          <Subtitle>Get moving with Nuber</Subtitle>
+          <FakeInput>
+            🇰🇷 +82 <Grey>Enter your mobile number</Grey>
+          </FakeInput>
+        </PhoneLogin>
+      </Link>
+      <Link to={"/social-login"}>
+        <SocialLogin>
+          <SocialLink>Or connect with social</SocialLink>
+        </SocialLogin>
+      </Link>
     </Footer>
   </Container>
 );
