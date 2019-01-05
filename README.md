@@ -7,3 +7,4 @@ Graphql-yoga: Backend
 Apollo: Frontend(like redux)
 
 2.2 권한(Authentication)
+2.3 set default client state - Apollo boost 세팅끝!!!
