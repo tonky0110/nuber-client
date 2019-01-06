@@ -53,26 +53,49 @@ const Button = styled.button`
   right: 50px;
   cursor: pointer;
 `;
+
 // interface 정의
+interface IProps {
+  countryCode: string;
+  phoneNumber: string;
+  onInputChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+}
 
 // render 정의
-const PhoneLoginPresenter = () => (
+const PhoneLoginPresenter: React.SFC<IProps> = ({
+  countryCode,
+  phoneNumber,
+  onInputChange,
+  onSubmit
+}) => (
   <Container>
     <Helmet>
       <title>Phone Login | Nuber</title>
     </Helmet>
     <BackArrowExtended backTo={"/"} />
     <Title>Enter your mobile number</Title>
-    <CountrySelect>
+    <CountrySelect
+      value={countryCode}
+      name={"countryCode"}
+      onChange={onInputChange}
+    >
       {countries.map((country, index) => (
         <CountryOption key={index} value={country.dial_code}>
           {country.flag} {country.name} ({country.dial_code})
         </CountryOption>
       ))}
     </CountrySelect>
-    <Form>
-      <Input placeholder={"010 1234 1234"} />
-      <Button>
+    <Form onSubmit={onSubmit}>
+      <Input
+        placeholder={"010 1234 1234"}
+        value={phoneNumber}
+        name={"phoneNumber"}
+        onChange={onInputChange}
+      />
+      <Button onClick={onSubmit}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
