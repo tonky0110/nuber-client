@@ -10,6 +10,7 @@ Apollo: Frontend(like redux)
 2.3 set default client state - Apollo boost 세팅끝!!!
 
 2.6 yarn add prop-types
+2.17 react-toastify
 
 ## Screens:
 

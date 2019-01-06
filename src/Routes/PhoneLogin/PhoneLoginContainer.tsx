@@ -1,5 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
 import PhoneLoginPresenter from "./PhoneLoginPresenter";
 
 // interface 정의
@@ -42,8 +43,21 @@ class PhoneLoginContainer extends React.Component<
   public onSubmit: React.FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault();
     const { countryCode, phoneNumber } = this.state;
-    // tslint:disable-next-line
-    console.log(countryCode, phoneNumber);
+    if (phoneNumber.indexOf("0") === 0) {
+      phoneNumber.substr(1);
+      // tslint:disable-next-line
+      console.log(phoneNumber.substr(1));
+    }
+    const isValid = /^\+[1-9]{1}[0-9]{7,11}$/.test(
+      `${countryCode}${
+        phoneNumber.indexOf("0") === 0 ? phoneNumber.substr(1) : phoneNumber
+      }`
+    );
+    if (isValid) {
+      return;
+    } else {
+      toast.error("Please write a valid phone number");
+    }
   };
 }
 
