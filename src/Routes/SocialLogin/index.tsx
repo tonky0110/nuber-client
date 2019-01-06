@@ -1,5 +1,3 @@
-import React from "react";
+import SocialLoginContainer from "./SocialLoginContainer";
 
-const SocialLogin = () => <span>SocialLogin</span>;
-
-export default SocialLogin;
+export default SocialLoginContainer;
