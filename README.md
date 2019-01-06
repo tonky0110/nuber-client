@@ -11,6 +11,11 @@ Apollo: Frontend(like redux)
 
 2.6 yarn add prop-types
 2.17 react-toastify
+2.18 PhoneLoginMutation
+
+    파라메터 2개
+        1. 나 --> apollo-boost에게 출 operation이름
+        2. 서버가 할 operation.
 
 ## Screens:
 
