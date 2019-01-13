@@ -17,7 +17,7 @@ const ExtendedInput = styled(Input)`
 
 interface IProps {
   key: string;
-  onChnage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const VerifyPhonePresenter: React.SFC<IProps> = ({ key, onChange }) => (
   <Container>

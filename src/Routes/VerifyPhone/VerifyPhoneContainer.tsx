@@ -23,7 +23,7 @@ class VerifyPhoneContainer extends React.Component<IProps, IState> {
 
   public render() {
     const { key } = this.state;
-    return <VerifyPhonePresenter key={key} />;
+    return <VerifyPhonePresenter onChange={this.onInputChange} key={key} />;
   }
 
   public onInputChange: React.ChangeEventHandler<HTMLInputElement> = event => {
