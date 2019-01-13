@@ -40,6 +40,7 @@ Apollo: Frontend(like redux)
         2. 서버가 할 operation.
 
 2.19 yarn add apollo
+src/types/api.d.ts 파일 생성
 
 yarn global add apollo@1.9.2
 -- 2.1.9버전에서는 몇가지 변경사항이 있어 실행안됨.

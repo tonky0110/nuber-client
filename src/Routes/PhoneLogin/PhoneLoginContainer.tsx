@@ -15,9 +15,9 @@ interface IState {
 }
 
 class PhoneSignInMutation extends Mutation<
-  startPhoneVerification,
-  startPhoneVerificationVariables
-> {}
+  startPhoneVerification, // function
+  startPhoneVerificationVariables// 변수
+> {} 
 
 class PhoneLoginContainer extends React.Component<
   RouteComponentProps<any>,
