@@ -7,6 +7,8 @@ interface IProps extends RouteComponentProps<any> {}
 class VerifyPhoneContainer extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props);
+    // tslint:disable-next-line
+    // console.log(props.location.state);
     if (!props.location.state) {
       props.history.push("/");
     }
