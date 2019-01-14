@@ -54,3 +54,6 @@ package.json파일.
 
 2.27 facebook login
 yarn add react-facebook-login
+
+2.31
+yarn add react-sidebar
