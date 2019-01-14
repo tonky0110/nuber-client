@@ -1,5 +1,4 @@
 import React from "react";
-import { MutationFn } from "react-apollo";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import Helmet from "react-helmet";
 import BackArrow from "../../Components/BackArrow";
@@ -10,18 +9,22 @@ const Container = styled.div`
   margin-top: 30px;
   padding: 50px 20px;
 `;
+
 const Title = styled.h2`
   font-size: 25px;
   margin-bottom: 40px;
 `;
+
 const Link = styled.span`
   display: flex;
   align-items: center;
   cursor: pointer;
 `;
+
 const Icon = styled.span`
   margin-right: 10px;
 `;
+
 const BackArrowExtended = styled(BackArrow)`
   position: absolute;
   top: 20px;
@@ -29,10 +32,10 @@ const BackArrowExtended = styled(BackArrow)`
 `;
 // interface 정의
 interface IProps {
-  loginCallback: MutationFn;
+  loginCallback: (response) => void;
 }
 // render 정의
-const SocialLoginPresenter: React.SFC<IProps> = ({ loginCallBack }) => (
+const SocialLoginPresenter: React.SFC<IProps> = ({ loginCallback }) => (
   <Container>
     <Helmet>
       <title>Social Login | Nuber</title>
@@ -42,8 +45,8 @@ const SocialLoginPresenter: React.SFC<IProps> = ({ loginCallBack }) => (
     <FacebookLogin
       appId="359172667997243"
       autoLoad={true}
-      fields="name, email,picture"
-      callback={loginCallBack}
+      fields="name,first_name,last_name,email"
+      callback={loginCallback}
       render={renderProps => (
         <Link onClick={renderProps.onClick}>
           <Icon>
