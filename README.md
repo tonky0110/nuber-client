@@ -57,3 +57,11 @@ yarn add react-facebook-login
 
 2.31
 yarn add react-sidebar
+
+2.39
+cloudinary
+login --> setting --> upload --> uploadpresets --> add upload preset --> signing mode: unsigned --> save
+
+Upload Manipulations --> Incoming Transformation:
+
+yarn add axios
