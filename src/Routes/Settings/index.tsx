@@ -1,5 +1,2 @@
-import React from "react";
-
-const Settings = () => <span>Settings</span>;
-
-export default Settings;
+import SettingsContainer from "./SettingsContainer";
+export default SettingsContainer;

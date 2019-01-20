@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { LOG_USER_IN } from "../../sharedQueries.local";
 import { verifyPhone, verifyPhoneVariables } from "../../types/api";
 import VerifyPhonePresenter from "./VerifyPhonePresenter";
-import { VERIFY_PHONE } from "./VerifyPhoneQueries.local";
+import { VERIFY_PHONE } from "./VerifyPhoneQueries";
 
 interface IState {
   verificationKey: string;
