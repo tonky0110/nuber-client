@@ -1,5 +1,3 @@
-import React from "react";
+import AddPlaceContainer from "./AddPlaceContainer";
 
-const AddPlace = () => <span>AddPlace</span>;
-
-export default AddPlace;
+export default AddPlaceContainer;
