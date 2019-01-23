@@ -65,3 +65,8 @@ login --> setting --> upload --> uploadpresets --> add upload preset --> signing
 Upload Manipulations --> Incoming Transformation:
 
 yarn add axios
+
+2.46 Google Map
+yarn add google-map-react
+https://console.cloud.google.com/apis/
+maps javascript api --> 사용설정. --> 사용자 인증 정보
