@@ -70,3 +70,12 @@ yarn add axios
 yarn add google-map-react
 https://console.cloud.google.com/apis/
 maps javascript api --> 사용설정. --> 사용자 인증 정보
+
+css 트릭(중앙배치)
+margin: auto;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+
+getCurrentPosition검색 --> Geolocation.getCurrentPosition()
