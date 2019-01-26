@@ -35,7 +35,7 @@ class FindAddressContainer extends React.Component<any, IState> {
         address={address}
         mapRef={this.mapRef}
         onInputChange={this.onInputChange}
-        onBlur={this.onBlur}
+        onBlur={this.onInputBlur}
       />
     );
   }
@@ -61,7 +61,8 @@ class FindAddressContainer extends React.Component<any, IState> {
     const mapConfig: google.maps.MapOptions = {
       center: { lat, lng },
       disableDefaultUI: true,
-      zoom: 15
+      minZoom: 8,
+      zoom: 11
     };
     this.map = new maps.Map(mapNode, mapConfig);
     this.map.addListener("dragend", this.handelDragEnd);
@@ -84,10 +85,27 @@ class FindAddressContainer extends React.Component<any, IState> {
       [name]: value
     } as any);
   };
-  public onBlur = () => {
+  public onInputBlur = async () => {
     const { address } = this.state;
-    geoCode(address);
+    const result = await geoCode(address);
+    if (result !== false) {
+      const { formatted_address: formattedAddress, lat, lng } = result;
+      this.setState({
+        address: formattedAddress,
+        lat,
+        lng
+      });
+      // Type 1
+      // const latLng = new google.maps.LatLng(lat, lng);
+      // this.map.panTo(latLng);
+
+      // Type 2
+      this.map.panTo({ lat, lng });
+    } else {
+      return;
+    }
   };
+
   public reverseGeocodeAddress = async (lat: number, lng: number) => {
     const reversedAddress = await reverseCeoCode(lat, lng);
     if (reversedAddress !== false) {
