@@ -1,18 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { RouteComponentProps } from "react-router-dom";
-import { geoCode, reverseCeoCode } from "../../mapHelpers";
+import { geoCode, reverseGeoCode } from "../../mapHelpers";
 import FindAddressPresenter from "./FindAddressPresenter";
 
-// interface IProps extends RouteComponentProps<any> {}
 interface IState {
   lat: number;
   lng: number;
   address: string;
 }
+
 interface IProps extends RouteComponentProps<any> {
   google: any;
 }
+
 class FindAddressContainer extends React.Component<IProps, IState> {
   public mapRef: any;
   public map: google.maps.Map;
@@ -27,36 +28,34 @@ class FindAddressContainer extends React.Component<IProps, IState> {
   }
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      this.handleGeoSuccess,
+      this.handleGeoSucces,
       this.handleGeoError
     );
   }
   public render() {
     const { address } = this.state;
-    // console.log(this.props);
     return (
       <FindAddressPresenter
-        address={address}
         mapRef={this.mapRef}
-        onBlur={this.onInputBlur}
+        address={address}
         onInputChange={this.onInputChange}
+        onInputBlur={this.onInputBlur}
         onPickPlace={this.onPickPlace}
       />
     );
   }
-  public handleGeoSuccess = (position: Position) => {
+  public handleGeoSucces: PositionCallback = (positon: Position) => {
     const {
       coords: { latitude, longitude }
-    } = position;
-    // console.log(position);
+    } = positon;
     this.setState({
       lat: latitude,
       lng: longitude
     });
     this.loadMap(latitude, longitude);
-    this.reverseGeocodeAddress(latitude, longitude);
+    this.reverseGeoCodeAddress(latitude, longitude);
   };
-  public handleGeoError = () => {
+  public handleGeoError: PositionErrorCallback = () => {
     console.log("No location");
   };
   public loadMap = (lat, lng) => {
@@ -64,15 +63,18 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     const maps = google.maps;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
     const mapConfig: google.maps.MapOptions = {
-      center: { lat, lng },
+      center: {
+        lat,
+        lng
+      },
       disableDefaultUI: true,
       minZoom: 8,
       zoom: 11
     };
     this.map = new maps.Map(mapNode, mapConfig);
-    this.map.addListener("dragend", this.handelDragEnd);
+    this.map.addListener("dragend", this.handleDragEnd);
   };
-  public handelDragEnd = () => {
+  public handleDragEnd = () => {
     const newCenter = this.map.getCenter();
     const lat = newCenter.lat();
     const lng = newCenter.lng();
@@ -80,7 +82,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       lat,
       lng
     });
-    this.reverseGeocodeAddress(lat, lng);
+    this.reverseGeoCodeAddress(lat, lng);
   };
   public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -94,24 +96,17 @@ class FindAddressContainer extends React.Component<IProps, IState> {
     const { address } = this.state;
     const result = await geoCode(address);
     if (result !== false) {
-      const { formatted_address: formattedAddress, lat, lng } = result;
+      const { lat, lng, formatted_address: formatedAddress } = result;
       this.setState({
-        address: formattedAddress,
+        address: formatedAddress,
         lat,
         lng
       });
-      // Type 1
-      // const latLng = new google.maps.LatLng(lat, lng);
-      // this.map.panTo(latLng);
-
-      // Type 2
       this.map.panTo({ lat, lng });
-    } else {
-      return;
     }
   };
-  public reverseGeocodeAddress = async (lat: number, lng: number) => {
-    const reversedAddress = await reverseCeoCode(lat, lng);
+  public reverseGeoCodeAddress = async (lat: number, lng: number) => {
+    const reversedAddress = await reverseGeoCode(lat, lng);
     if (reversedAddress !== false) {
       this.setState({
         address: reversedAddress
@@ -129,7 +124,6 @@ class FindAddressContainer extends React.Component<IProps, IState> {
         lng
       }
     });
-    console.log(address, lat, lng);
   };
 }
 

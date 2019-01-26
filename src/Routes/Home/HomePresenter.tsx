@@ -6,7 +6,30 @@ import styled from "../../typed-components";
 
 const Container = styled.div``;
 
+const Button = styled.button`
+  appearance: none;
+  padding: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  text-align: center;
+  font-weight: 800;
+  border: 0;
+  cursor: pointer;
+  font-size: 20px;
+  transform: rotate(90deg);
+  z-index: 2;
+  background-color: transparent;
+`;
+
+const Map = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+`;
+
 interface IProps {
+  mapRef: any;
   loading: boolean;
   isMenuOpen: boolean;
   toggleMenu: () => void;
@@ -15,7 +38,8 @@ interface IProps {
 const HomePresenter: React.SFC<IProps> = ({
   loading,
   isMenuOpen,
-  toggleMenu
+  toggleMenu,
+  mapRef
 }) => (
   <Container>
     <Helmet>
@@ -33,7 +57,8 @@ const HomePresenter: React.SFC<IProps> = ({
         }
       }}
     >
-      {!loading && <button onClick={() => toggleMenu()}>Open sidebar</button>}
+      {!loading && <Button onClick={() => toggleMenu()}>|||</Button>}
+      <Map ref={mapRef} />
     </Sidebar>
   </Container>
 );

@@ -40,14 +40,20 @@ const ExtendedButton = styled(Button)`
 interface IProps {
   mapRef: any;
   address: string;
-  onBlur: () => void;
+  onInputBlur: () => void;
   onPickPlace: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 class FindAddressPresenter extends React.Component<IProps> {
   public render() {
-    const { mapRef, address, onBlur, onInputChange, onPickPlace } = this.props;
+    const {
+      mapRef,
+      address,
+      onInputBlur,
+      onInputChange,
+      onPickPlace
+    } = this.props;
     return (
       <div>
         <Helmet>
@@ -56,7 +62,7 @@ class FindAddressPresenter extends React.Component<IProps> {
         <AddressBar
           name={"address"}
           value={address}
-          onBlur={onBlur}
+          onBlur={onInputBlur}
           onChange={onInputChange}
         />
         <ExtendedButton value={"Pick this place"} onClick={onPickPlace} />
