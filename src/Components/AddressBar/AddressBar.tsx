@@ -11,7 +11,7 @@ const Container = styled.input`
   border: 0;
   font-size: 16px;
   padding: 15px 10px;
-  box-shadow: 0 18 35px rgba(50, 50, 93, 0.1), 0 8px 15px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 18px 35px rgba(50, 50, 93, 0.1), 0 8px 15px rgba(0, 0, 0, 0.07);
   margin: auto;
   top: 10px;
   left: 0;
