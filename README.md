@@ -79,3 +79,16 @@ right: 0;
 bottom: 0;
 
 getCurrentPosition검색 --> Geolocation.getCurrentPosition()
+
+2.49 reverse geocode
+https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}
+
+https://console.developers.google.com/google/maps-apis/apis/geocoding-backend.googleapis.com/credentials?project=reactsimplestarter-tonky0110&hl=ko&duration=P14D
+
+※ Geocoding APIs 권한 추가.
+Check your settings in the Google API Console for this API key. Be sure that the
+
+- Maps JavaScript,
+- Places,
+- Geolocation,
+- Geocode APIs are all enabled.

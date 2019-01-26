@@ -1,15 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { reverseCeoCode } from "../../mapHelpers";
 import FindAddressPresenter from "./FindAddressPresenter";
 
 // interface IProps extends RouteComponentProps<any> {}
 interface IState {
   lat: number;
   lng: number;
+  address: string;
 }
 class FindAddressContainer extends React.Component<any, IState> {
   public mapRef: any;
   public map: google.maps.Map;
+  public state = {
+    address: "",
+    lat: 0,
+    lng: 0
+  };
   constructor(props) {
     super(props);
     this.mapRef = React.createRef();
@@ -21,8 +28,16 @@ class FindAddressContainer extends React.Component<any, IState> {
     );
   }
   public render() {
+    const { address } = this.state;
     // console.log(this.props);
-    return <FindAddressPresenter mapRef={this.mapRef} />;
+    return (
+      <FindAddressPresenter
+        address={address}
+        mapRef={this.mapRef}
+        onInputChange={this.onInputChange}
+        onBlur={this.onBlur}
+      />
+    );
   }
   public handleGeoSuccess = (position: Position) => {
     const {
@@ -50,15 +65,27 @@ class FindAddressContainer extends React.Component<any, IState> {
     this.map = new maps.Map(mapNode, mapConfig);
     this.map.addListener("dragend", this.handelDragEnd);
   };
-  public handelDragEnd = () => {
+  public handelDragEnd = async () => {
     const newCenter = this.map.getCenter();
     const lat = newCenter.lat();
     const lng = newCenter.lng();
-    console.log(lat, lng);
+    const reversedAddress = await reverseCeoCode(lat, lng);
     this.setState({
+      address: reversedAddress,
       lat,
       lng
     });
+  };
+  public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value }
+    } = event;
+    this.setState({
+      [name]: value
+    } as any);
+  };
+  public onBlur = () => {
+    console.log("Address updated");
   };
 }
 
