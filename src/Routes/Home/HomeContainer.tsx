@@ -70,8 +70,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     this.loadMap(latitude, longitude);
   };
   public loadMap = (lat, lng) => {
-    const { google } = this.props;
-    const maps = google.maps;
+    const { google: { maps = {} } = {} } = this.props;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
     const mapConfig: google.maps.MapOptions = {
       center: {

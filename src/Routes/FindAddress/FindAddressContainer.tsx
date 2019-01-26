@@ -28,7 +28,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
   }
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      this.handleGeoSucces,
+      this.handleGeoSuccess,
       this.handleGeoError
     );
   }
@@ -44,10 +44,10 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       />
     );
   }
-  public handleGeoSucces: PositionCallback = (positon: Position) => {
+  public handleGeoSuccess: PositionCallback = (position: Position) => {
     const {
       coords: { latitude, longitude }
-    } = positon;
+    } = position;
     this.setState({
       lat: latitude,
       lng: longitude
