@@ -92,3 +92,5 @@ Check your settings in the Google API Console for this API key. Be sure that the
 - Places,
 - Geolocation,
 - Geocode APIs are all enabled.
+
+  2.51 구글 map api 신용카드를등록하면 300달러 어치를 무료로 사용할수있습니다. 동의없이 초과시엔 자동결제는 되지않는다고 하네요 .
