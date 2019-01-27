@@ -5,6 +5,7 @@ import AddressBar from "../../Components/AddressBar";
 import Button from "../../Components/Button";
 import Menu from "../../Components/Menu";
 import styled from "../../typed-components";
+import { userProfile } from "../../types/api";
 
 const Container = styled.div``;
 
@@ -36,7 +37,7 @@ const ExtendedButton = styled(Button)`
   left: 0;
   right: 0;
   margin: auto;
-  z-index: 10;
+  z-index: 2;
   height: auto;
   width: 80%;
 `;
@@ -51,6 +52,7 @@ interface IProps {
   loading: boolean;
   isMenuOpen: boolean;
   price?: number;
+  data?: userProfile;
   toggleMenu: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void; //  () => void;
   onAddressSubmit: () => void;
@@ -63,6 +65,7 @@ const HomePresenter: React.SFC<IProps> = ({
   mapRef,
   toAddress,
   price,
+  data: { GetMyProfile: { user = null } = {} } = {},
   onInputChange,
   onAddressSubmit
 }) => (
@@ -83,12 +86,21 @@ const HomePresenter: React.SFC<IProps> = ({
       }}
     >
       {!loading && <MenuButton onClick={() => toggleMenu()}>|||</MenuButton>}
-      <AddressBar
-        name={"toAddress"}
-        value={toAddress}
-        onChange={onInputChange}
-        onBlur={null}
-      />
+      {user && !user.isDriving && (
+        <React.Fragment>
+          <AddressBar
+            name={"toAddress"}
+            value={toAddress}
+            onChange={onInputChange}
+            onBlur={null}
+          />
+          <ExtendedButton
+            onClick={onAddressSubmit}
+            disabled={toAddress === ""}
+            value={price ? "Change Address" : "Pick Address"}
+          />
+        </React.Fragment>
+      )}
       {price && (
         <RequestButton
           onClick={onAddressSubmit}
@@ -96,11 +108,7 @@ const HomePresenter: React.SFC<IProps> = ({
           value={`Request Ride ($${price})`}
         />
       )}
-      <ExtendedButton
-        onClick={onAddressSubmit}
-        disabled={toAddress === ""}
-        value={price ? "Change Address" : "Pick Address"}
-      />
+
       <Map ref={mapRef} />
     </Sidebar>
   </Container>
