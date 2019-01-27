@@ -2,6 +2,7 @@ import React from "react";
 import { Query } from "react-apollo";
 import ReactDOM from "react-dom";
 import { RouteComponentProps } from "react-router";
+import { toast } from "react-toastify";
 import { geoCode } from "../../mapHelpers";
 import { USER_PROFILE } from "../../sharedQueries";
 import { userProfile } from "../../types/api";
@@ -10,10 +11,13 @@ import HomePresenter from "./HomePresenter";
 interface IState {
   isMenuOpen: boolean;
   toAddress: string;
-  lat: number;
-  lng: number;
   toLat: number;
   toLng: number;
+  lat: number;
+  lng: number;
+  distance?: string;
+  duration?: string;
+  price?: number;
 }
 
 interface IProps extends RouteComponentProps<any> {
@@ -41,14 +45,14 @@ class HomeContainer extends React.Component<IProps, IState> {
     super(props);
     this.mapRef = React.createRef();
   }
-  
+
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       this.handleGeoSuccess,
       this.handleGeoError
     );
   }
-  
+
   public render() {
     const { isMenuOpen, toAddress } = this.state;
     return (
@@ -67,7 +71,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       </ProfileQuery>
     );
   }
-  
+
   public toggleMenu = () => {
     this.setState(state => {
       return {
@@ -75,7 +79,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
     });
   };
-  
+
   public handleGeoSuccess = (position: Position) => {
     const {
       coords: { latitude: lat, longitude: lng }
@@ -86,7 +90,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     });
     this.loadMap(lat, lng);
   };
-  
+
   public loadMap = (lat, lng) => {
     console.log(lat, lng);
     const { google: { maps = {} } = {} } = this.props;
@@ -121,7 +125,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       watchOptions
     );
   };
-  
+
   public handleGeoWatchSuccess = (position: Position) => {
     const {
       coords: { latitude: lat, longitude: lng }
@@ -132,11 +136,11 @@ class HomeContainer extends React.Component<IProps, IState> {
   public handleGeoWatchError = () => {
     console.log("No watching you");
   };
-  
+
   public handleGeoError = () => {
     console.log("No location");
   };
-  
+
   public onInputChange = event => {
     const {
       target: { name, value }
@@ -169,24 +173,61 @@ class HomeContainer extends React.Component<IProps, IState> {
       bounds.extend({ lat: toLat, lng: toLng });
       bounds.extend({ lat: this.state.lat, lng: this.state.lng });
       this.map.fitBounds(bounds);
+      this.setState(
+        {
+          toAddress: formattedAddress,
+          toLat,
+          toLng
+        },
+        this.createPath
+      );
     }
   };
-  
+
   public createPath = () => {
     const { toLat, toLng, lat, lng } = this.state;
     console.log(toLat, toLng, lat, lng);
     if (this.directions) {
       this.directions.setMap(null);
     }
-    const renderOption: google.maps.DirectionsRendererOptions = {
+    const renderOptions: google.maps.DirectionsRendererOptions = {
       polylineOptions: {
         strokeColor: "#000"
       },
       suppressMarkers: true
     };
+    this.directions = new google.maps.DirectionsRenderer(renderOptions);
     const directionService: google.maps.DirectionsService = new google.maps.DirectionsService();
+    const to = new google.maps.LatLng(toLat, toLng);
+    const from = new google.maps.LatLng(lat, lng);
 
-    console.log(renderOption, directionService);
+    const directionOptions: google.maps.DirectionsRequest = {
+      destination: to,
+      origin: from,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionService.route(directionOptions, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        const { routes } = result;
+        const {
+          distance: { text: distance },
+          duration: { text: duration }
+        } = routes[0].legs[0];
+        this.setState({
+          distance,
+          duration
+        });
+        this.directions.setDirections(result);
+        this.directions.setMap(this.map);
+      } else {
+        toast.error("There is no route there, you have to swim");
+      }
+    });
+    // const directionOptions: google.maps.DirectionsRequest = {
+    //   destination: to,
+    //   origin: from,
+    //   transitMode: google.maps.TransitMode.BUS
+    // };
   };
 }
 
