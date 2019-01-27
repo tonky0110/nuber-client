@@ -27,6 +27,7 @@ class HomeContainer extends React.Component<IProps, IState> {
   public map: google.maps.Map;
   public userMarker: google.maps.Marker;
   public toMarker: google.maps.Marker;
+  public directions: google.maps.DirectionsRenderer;
   public state = {
     isMenuOpen: false,
     lat: 0,
@@ -35,16 +36,19 @@ class HomeContainer extends React.Component<IProps, IState> {
     toLat: 0,
     toLng: 0
   };
+
   constructor(props) {
     super(props);
     this.mapRef = React.createRef();
   }
+  
   public componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       this.handleGeoSuccess,
       this.handleGeoError
     );
   }
+  
   public render() {
     const { isMenuOpen, toAddress } = this.state;
     return (
@@ -63,6 +67,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       </ProfileQuery>
     );
   }
+  
   public toggleMenu = () => {
     this.setState(state => {
       return {
@@ -70,6 +75,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
     });
   };
+  
   public handleGeoSuccess = (position: Position) => {
     const {
       coords: { latitude: lat, longitude: lng }
@@ -80,6 +86,7 @@ class HomeContainer extends React.Component<IProps, IState> {
     });
     this.loadMap(lat, lng);
   };
+  
   public loadMap = (lat, lng) => {
     console.log(lat, lng);
     const { google: { maps = {} } = {} } = this.props;
@@ -90,7 +97,6 @@ class HomeContainer extends React.Component<IProps, IState> {
         lng
       },
       disableDefaultUI: true,
-      minZoom: 8,
       zoom: 16
     };
     this.map = new maps.Map(mapNode, mapConfig);
@@ -115,6 +121,7 @@ class HomeContainer extends React.Component<IProps, IState> {
       watchOptions
     );
   };
+  
   public handleGeoWatchSuccess = (position: Position) => {
     const {
       coords: { latitude: lat, longitude: lng }
@@ -125,15 +132,18 @@ class HomeContainer extends React.Component<IProps, IState> {
   public handleGeoWatchError = () => {
     console.log("No watching you");
   };
+  
   public handleGeoError = () => {
     console.log("No location");
   };
+  
   public onInputChange = event => {
     const {
       target: { name, value }
     } = event;
     this.setState({ [name]: value } as any);
   };
+
   public onAddressSubmit = async () => {
     const { toAddress } = this.state;
     const { google: { maps = {} } = {} } = this.props;
@@ -144,11 +154,6 @@ class HomeContainer extends React.Component<IProps, IState> {
         lng: toLng,
         formatted_address: formattedAddress
       } = result;
-      this.setState({
-        toAddress: formattedAddress,
-        toLat,
-        toLng
-      });
       if (this.toMarker) {
         this.toMarker.setMap(null);
       }
@@ -160,7 +165,28 @@ class HomeContainer extends React.Component<IProps, IState> {
       };
       this.toMarker = new maps.Marker(toMarkerOptions);
       this.toMarker.setMap(this.map);
+      const bounds = new maps.LatLngBounds();
+      bounds.extend({ lat: toLat, lng: toLng });
+      bounds.extend({ lat: this.state.lat, lng: this.state.lng });
+      this.map.fitBounds(bounds);
     }
+  };
+  
+  public createPath = () => {
+    const { toLat, toLng, lat, lng } = this.state;
+    console.log(toLat, toLng, lat, lng);
+    if (this.directions) {
+      this.directions.setMap(null);
+    }
+    const renderOption: google.maps.DirectionsRendererOptions = {
+      polylineOptions: {
+        strokeColor: "#000"
+      },
+      suppressMarkers: true
+    };
+    const directionService: google.maps.DirectionsService = new google.maps.DirectionsService();
+
+    console.log(renderOption, directionService);
   };
 }
 
