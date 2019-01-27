@@ -74,7 +74,7 @@ class FindAddressContainer extends React.Component<IProps, IState> {
       },
       disableDefaultUI: true,
       minZoom: 8,
-      zoom: 11
+      zoom: 15
     };
     this.map = new maps.Map(mapNode, mapConfig);
     this.map.addListener("dragend", this.handleDragEnd);

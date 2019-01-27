@@ -8,7 +8,6 @@ export const geoCode = async (address: string) => {
   if (!data.error_message) {
     const { results } = data;
     const firstPlace = results[0];
-    console.log("firstPlace:", firstPlace);
     if (!firstPlace) {
       return false;
     }
