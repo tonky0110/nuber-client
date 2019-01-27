@@ -33,10 +33,13 @@ class HomeContainer extends React.Component<IProps, IState> {
   public toMarker: google.maps.Marker;
   public directions: google.maps.DirectionsRenderer;
   public state = {
+    distance: undefined,
+    duration: undefined,
     isMenuOpen: false,
     lat: 0,
     lng: 0,
-    toAddress: "",
+    price: undefined,
+    toAddress: "향군타워",
     toLat: 0,
     toLng: 0
   };
@@ -54,7 +57,7 @@ class HomeContainer extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { isMenuOpen, toAddress } = this.state;
+    const { isMenuOpen, toAddress, price } = this.state;
     return (
       <ProfileQuery query={USER_PROFILE}>
         {({ loading }) => (
@@ -64,6 +67,7 @@ class HomeContainer extends React.Component<IProps, IState> {
             toggleMenu={this.toggleMenu}
             mapRef={this.mapRef}
             toAddress={toAddress}
+            price={price}
             onInputChange={this.onInputChange}
             onAddressSubmit={this.onAddressSubmit}
           />
@@ -92,7 +96,6 @@ class HomeContainer extends React.Component<IProps, IState> {
   };
 
   public loadMap = (lat, lng) => {
-    console.log(lat, lng);
     const { google: { maps = {} } = {} } = this.props;
     const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
     const mapConfig: google.maps.MapOptions = {
@@ -186,7 +189,6 @@ class HomeContainer extends React.Component<IProps, IState> {
 
   public createPath = () => {
     const { toLat, toLng, lat, lng } = this.state;
-    console.log(toLat, toLng, lat, lng);
     if (this.directions) {
       this.directions.setMap(null);
     }
@@ -204,30 +206,45 @@ class HomeContainer extends React.Component<IProps, IState> {
     const directionOptions: google.maps.DirectionsRequest = {
       destination: to,
       origin: from,
-      travelMode: google.maps.TravelMode.DRIVING
+      travelMode: google.maps.TravelMode.TRANSIT
     };
-    directionService.route(directionOptions, (result, status) => {
-      if (status === google.maps.DirectionsStatus.OK) {
-        const { routes } = result;
-        const {
-          distance: { text: distance },
-          duration: { text: duration }
-        } = routes[0].legs[0];
-        this.setState({
-          distance,
-          duration
-        });
-        this.directions.setDirections(result);
-        this.directions.setMap(this.map);
-      } else {
-        toast.error("There is no route there, you have to swim");
-      }
-    });
-    // const directionOptions: google.maps.DirectionsRequest = {
-    //   destination: to,
-    //   origin: from,
-    //   transitMode: google.maps.TransitMode.BUS
-    // };
+    directionService.route(directionOptions, this.handleRouteRequest);
+  };
+
+  public handleRouteRequest = (
+    result: google.maps.DirectionsResult,
+    status: google.maps.DirectionsStatus
+  ) => {
+    if (status === google.maps.DirectionsStatus.OK) {
+      const { routes } = result;
+      const {
+        distance: { text: distance },
+        duration: { text: duration }
+      } = routes[0].legs[0];
+      this.directions.setDirections(result);
+      this.directions.setMap(this.map);
+      this.setState({
+        distance,
+        duration
+      });
+      // this.setPlace(); // 원래 있어야하는 자리 API권한 문제로 direction이 안되는 관계로 아래에 작성.
+    } else {
+      toast.error("There is no route there, you have to swim");
+    }
+    this.setPlace();
+  };
+
+  public setPlace = () => {
+    const { distance = "20.0 km" } = this.state;
+
+    const price =
+      parseFloat(
+        distance
+          .replace(" km", "")
+          .split(",")
+          .join("")
+      ) * 3.0;
+    this.setState({ price });
   };
 }
 

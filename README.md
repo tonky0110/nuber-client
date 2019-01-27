@@ -71,6 +71,9 @@ yarn add google-map-react
 https://console.cloud.google.com/apis/
 maps javascript api --> 사용설정. --> 사용자 인증 정보
 
+keys.ts
+export const MAPS_KEY = "구글API키";
+
 css 트릭(중앙배치)
 margin: auto;
 top: 0;
